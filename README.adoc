@@ -1,27 +1,39 @@
-= `asciidoc-ts-mode`
+= asciidoc-mode
 
-`asciidoc-ts-mode` is a GNU Emacs major mode for https://docs.asciidoctor.org/[AsciiDoc] syntax support powered by TreeSitter.
+This package contains two major modes for https://docs.asciidoctor.org/[AsciiDoc] syntax:
+
+* `asciidoc-mode` -- obsolete mode based on the regular expressions;
+
+* `asciidoc-ts-mode` -- modern mode based powered by TreeSitter and based on the cathaysia https://github.com/cathaysia/tree-sitter-asciidoc[Asciidoc TreeSitter parser].
+
 
 == Prerequirements
 
+Check TreeSitter support in Emacs:
+
+. Call `eval-expression` command with this code:
++
+[source, lisp]
+----
+(featurep 'treesit)
+----
+
+. If minibuffer show `t`, your Emacs compiled with TreeSitter support.
 
 
 == Installation
 
 Now this repository is not availiable in any package arhives like a MELPA, ELPA and other. You must install this package manually:
 
-. Clone this repo to any folder:
+. Add into your init file:
 +
-[source, emacs-lisp]
+[source, lisp]
 ----
-git clone https://github.com/dunmaksim/asciidoc-mode.git
+(use-package asciidoc-ts-mode
+  :vc (:url "https://github.com/dunmaksim/asciidoc-ts-mode.git")
+  :mode
+  ("\\.adoc\\'"     . asciidoc-ts-mode)
+  ("\\.asciidoc\\'" . asciidoc-ts-mode))
 ----
 
-. Add code into your `init.el`:
-+
-[source, emacs-lisp]
-----
-(use-package asciidoc-mode
-  :load-path "path/to/repository/folder/"
-  :mode ("\\.adoc\\'" . asciidoc-mode))
-----
+. Call the `asciidoc-ts-mode-install-grammar` command.

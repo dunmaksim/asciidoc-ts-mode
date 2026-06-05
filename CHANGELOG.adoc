@@ -1,6 +1,11 @@
-# Changelog
+= Changelog
 
-## 2025-11-29
+== 2026-05-05
+
+Add rewritted from scratch `asciidoc-ts-mode.el` file.
+
+
+== 2025-11-29
 
 Back to search based parsing. Remove `asciidoc-ts-mode`.
 
@@ -13,10 +18,11 @@ Now supported:
 * btn macro
 
 
-## 2025-10-16
+== 2025-10-16
 
 * Added `asciidoc-ts-mode`.
 
-## 2024-12-27
+
+== 2024-12-27
 
 * Added superscript and subscript regular expressions and Font Lock's.
