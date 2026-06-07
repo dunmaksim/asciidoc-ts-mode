@@ -144,20 +144,20 @@ code block region, e.g.:
 
 
 (add-to-list
- 'treesit-language-source-alist
- '(asciidoc
-   "https://github.com/cathaysia/tree-sitter-asciidoc"
-   "v0.3.0" ;; Emacs 30
-   "tree-sitter-asciidoc/src")
- t)
+  'treesit-language-source-alist
+  '(asciidoc
+     "https://github.com/cathaysia/tree-sitter-asciidoc"
+     "v0.3.0" ;; Emacs 30
+     "tree-sitter-asciidoc/src")
+  t)
 
 (add-to-list
- 'treesit-language-source-alist
- '(asciidoc-inline
-   "https://github.com/cathaysia/tree-sitter-asciidoc"
-   "v0.3.0" ;; Emacs 30
-   "tree-sitter-asciidoc_inline/src")
- t)
+  'treesit-language-source-alist
+  '(asciidoc-inline
+     "https://github.com/cathaysia/tree-sitter-asciidoc"
+     "v0.3.0" ;; Emacs 30
+     "tree-sitter-asciidoc_inline/src")
+  t)
 
 
 (defun asciidoc-ts-install-grammars ()
@@ -171,117 +171,122 @@ code block region, e.g.:
 
 (defvar asciidoc-ts-mode--font-lock-rules
   (treesit-font-lock-rules
-   :language 'asciidoc
-   :feature 'comment
-   '((line_comment) @font-lock-comment-face
-     (block_comment) @font-lock-comment-face)
+    :language 'asciidoc
+    :feature 'comment
+    '((line_comment) @font-lock-comment-face
+       (block_comment) @font-lock-comment-face)
 
-   ;; Headings
-   :language 'asciidoc
-   :feature 'heading
-   ;; = Document title (level 0 title)
-   '((document_title
-      (title_h0_marker) @asciidoc-ts-heading-0 ;; Bug in parser: document attrs parsed like a part of document header
-      (line) @asciidoc-ts-heading-0)
-     (title1) @asciidoc-ts-heading-1
-     (title2) @asciidoc-ts-heading-2
-     (title3) @asciidoc-ts-heading-3
-     (title4) @asciidoc-ts-heading-4
-     (title5) @asciidoc-ts-heading-5)
+    ;; Headings
+    :language 'asciidoc
+    :feature 'heading
+    ;; = Document title (level 0 title)
+    '((document_title
+        (title_h0_marker) @asciidoc-ts-heading-0 ;; Bug in parser: document attrs parsed like a part of document header
+        (line) @asciidoc-ts-heading-0)
+       (title1) @asciidoc-ts-heading-1
+       (title2) @asciidoc-ts-heading-2
+       (title3) @asciidoc-ts-heading-3
+       (title4) @asciidoc-ts-heading-4
+       (title5) @asciidoc-ts-heading-5)
 
-   ;; Document and element attributes
-   :language 'asciidoc
-   :feature 'attribute
-   '((document_attr
-      (document_attr_marker) @font-lock-delimiter-face
-      (attr_name) @font-lock-variable-name-face
-      (document_attr_marker) @font-lock-delimiter-face
-      (line) @font-lock-variable-use-face)
-     (element_attr
-      (element_attr_marker) @font-lock-delimiter-face
-      (attr_value) @font-lock-variable-name-face
-      (element_attr_marker) @font-lock-delimiter-face))
+    ;; Document and element attributes
+    :language 'asciidoc
+    :feature 'attribute
+    '((document_attr
+        (document_attr_marker) @font-lock-delimiter-face
+        (attr_name) @font-lock-variable-name-face
+        (document_attr_marker) @font-lock-delimiter-face
+        (line) @font-lock-variable-use-face)
+       (element_attr
+         (element_attr_marker) @font-lock-delimiter-face
+         (attr_value) @font-lock-variable-name-face
+         (element_attr_marker) @font-lock-delimiter-face))
 
-   ;; Blocks
-   :language 'asciidoc
-   :feature 'block
-   '((block_title) @font-lock-doc-face
-     (listing_block
-      (listing_block_start_marker) @font-lock-bracket-face
-      (listing_block_body) @asciidoc-ts-code-span
-      (listing_block_end_marker) @font-lock-bracket-face)
-     (quoted_block
-      (quoted_block_marker) @font-lock-bracket-face
-      (line) @asciidoc-ts-block-quote
-      (quoted_block_marker) @font-lock-bracket-face))
+    ;; Blocks
+    :language 'asciidoc
+    :feature 'block
+    '((block_title) @font-lock-doc-face
+       (listing_block
+         (listing_block_start_marker) @font-lock-bracket-face
+         (listing_block_body) @asciidoc-ts-code-span
+         (listing_block_end_marker) @font-lock-bracket-face)
+       (quoted_block
+         (quoted_block_marker) @font-lock-bracket-face
+         (line) @asciidoc-ts-block-quote
+         (quoted_block_marker) @font-lock-bracket-face))
 
-   ;; Lists
-   :language 'asciidoc
-   :feature 'list
-   '((unordered_list_item
-      (unordered_list_marker) @asciidoc-ts-list-marker)
-     (ordered_list_item
-      (ordered_list_marker) @asciidoc-ts-list-marker)
-     (checked_list_item
-      (checked_list_marker) @asciidoc-ts-list-marker))
+    ;; Lists
+    :language 'asciidoc
+    :feature 'list
+    '((unordered_list_item
+        (unordered_list_marker) @asciidoc-ts-list-marker)
+       (ordered_list_item
+         (ordered_list_marker) @asciidoc-ts-list-marker)
+       (checked_list_item
+         (checked_list_marker) @asciidoc-ts-list-marker))
 
 
-   ;; Admonitions
-   :language 'asciidoc
-   :feature 'admonition
-   '((admonition
-      (admonition_note) @success)
-     (admonition
-      (admonition_tip) @success)
-     (admonition
-      (admonition_important) @warning)
-     (admonition
-      (admonition_caution) @error)
-     (admonition
-      (admonition_warning) @error))
+    ;; Admonitions
+    :language 'asciidoc
+    :feature 'admonition
+    '((admonition
+        (admonition_note) @success)
+       (admonition
+         (admonition_tip) @success)
+       (admonition
+         (admonition_important) @warning)
+       (admonition
+         (admonition_caution) @error)
+       (admonition
+         (admonition_warning) @error))
 
-   ;; Macro
-   :language 'asciidoc
-   :feature 'macro
-   '((block_macro
-      (block_macro_name) @asciidoc-ts-macro-name
-      "::" @asciidoc-ts-delimiter
-      (target) @asciidoc-ts-macro-target)
-     (block_macro_attr
-      (attribute_name) @asciidoc-ts-attribute-name
-      "=" @asciidoc-ts-delimiter
-      (attribute_value) @asciidoc-ts-attribute-value))
+    ;; Macro
+    :language 'asciidoc
+    :feature 'macro
+    '((block_macro
+        (block_macro_name) @asciidoc-ts-macro-name
+        "::" @asciidoc-ts-delimiter
+        (target) @asciidoc-ts-macro-target)
+       (block_macro_attr
+         (attribute_name) @asciidoc-ts-attribute-name
+         "=" @asciidoc-ts-delimiter
+         (attribute_value) @asciidoc-ts-attribute-value))
 
-   ;; Inline markup
-   :language 'asciidoc-inline
-   :feature 'markup
-   '((emphasis) @asciidoc-ts-bold  ;; Why not bold? I don't know!
-     (ltalic) @asciidoc-ts-emphasis ;; Typing error from parser! Don't fix here!
-     (monospace) @asciidoc-ts-code-span
-     (replacement) @font-lock-variable-use-face)
+    ;; Inline markup
+    :language 'asciidoc-inline
+    :feature 'markup
+    '((emphasis) @asciidoc-ts-bold  ;; Why not bold? I don't know!
+       (ltalic) @asciidoc-ts-emphasis ;; Typing error from parser! Don't fix here!
+       (monospace) @asciidoc-ts-code-span
+       (replacement) @font-lock-variable-use-face
+       (inline_element
+         (xref
+           ("<<") @asciidoc-ts-link
+           (id) @asciidoc-ts-link
+           (">>") @asciidoc-ts-link)))
 
-   ;; Macro
-   :language 'asciidoc-inline
-   :feature 'inline-macro
-   '((inline_macro
-      (macro_name) @font-lock-builtin-face
-      (target) @success)
-     (inline_macro
-      (macro_name) @font-lock-builtin-face
-      (attr) @font-lock-property-use-face)
-     (inline_macro
-      (macro_name) @font-lock-builtin-face
-      (target) @success
-      (attr) @font-lock-property-use-face)))
+    ;; Macro
+    :language 'asciidoc-inline
+    :feature 'inline-macro
+    '((inline_macro
+        (macro_name) @font-lock-builtin-face
+        (target) @success)
+       (inline_macro
+         (macro_name) @font-lock-builtin-face
+         (attr) @font-lock-property-use-face)
+       (inline_macro
+         (macro_name) @font-lock-builtin-face
+         (target) @success
+         (attr) @font-lock-property-use-face)))
   "Tree-Sitter Font-Lock rules for `asciidoc-ts-mode'.")
 
 
 ;; IMenu
 (defvar asciidoc-ts-mode--imenu-rules
   '(("Headings"
-     "heading"
-     nil
-     nil))
+      "heading"
+      nil
+      nil))
   "IMenu rules for `asciidoc-ts-mode'.")
 
 
@@ -312,11 +317,11 @@ Install them once with \\[asciidoc-ts-install-grammars]."
     (error "Tree-sitter is not available in this Emacs build"))
 
   (setq-local treesit-range-settings
-              (treesit-range-rules
-               :host 'asciidoc
-               :embed 'asciidoc-inline
-               :local t
-               '((line) @asciidoc-inline)))
+    (treesit-range-rules
+      :host 'asciidoc
+      :embed 'asciidoc-inline
+      :local t
+      '((line) @asciidoc-inline)))
 
   ;; Create parsers for both languages.
   ;; The block-level parser covers the whole buffer.
@@ -327,14 +332,14 @@ Install them once with \\[asciidoc-ts-install-grammars]."
   ;; Font-lock
   (setq-local treesit-font-lock-settings asciidoc-ts-mode--font-lock-rules)
   (setq-local treesit-font-lock-feature-list
-              '(;; Level 1 – always on
-                (comment block)
-                ;; Level 2 – default on
-                (heading attribute markup macro)
-                ;; Level 3 – default on
-                (list inline-macro)
-                ;; Level 4 – toggle with M-x font-lock-mode / customize
-                (admonition)))
+    '(;; Level 1 – always on
+       (comment block)
+       ;; Level 2 – default on
+       (heading attribute markup macro)
+       ;; Level 3 – default on
+       (list inline-macro)
+       ;; Level 4 – toggle with M-x font-lock-mode / customize
+       (admonition)))
   (treesit-major-mode-setup)
 
   ;; Imenu
@@ -364,8 +369,8 @@ Install them once with \\[asciidoc-ts-install-grammars]."
   "Enable `asciidoc-ts-mode' when its grammars are available."
   (declare-function treesit-language-available-p "treesit.c")
   (if (and (treesit-language-available-p 'asciidoc)
-           (treesit-language-available-p 'asciidoc-inline))
-      (asciidoc-ts-mode)
+        (treesit-language-available-p 'asciidoc-inline))
+    (asciidoc-ts-mode)
     (text-mode)))
 
 ;;;###autoload

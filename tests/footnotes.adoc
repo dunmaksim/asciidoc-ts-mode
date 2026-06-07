@@ -1,5 +1,7 @@
 = Footnotes
 
 Simple footnote with textfootnote:[Footnote text].
+
 Footnote with text and IDfootnote:link[Footnote Text].
+
 Footnote only with IDfootnote:link[].

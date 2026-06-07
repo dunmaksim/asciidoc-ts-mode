@@ -1,6 +1,0 @@
-# References
-
-<<xref>> variant 1.
-
-xref:[link] variant 2.
-

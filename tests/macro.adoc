@@ -28,20 +28,12 @@ include::more-file.adoc[]
 
 Макрос footnote со ссылкой на другую сноску: footnote:disclaimer[].
 
-// Блочный макрос:
 name::value[text]
 
-// Блочный макрос с пустым текстом:
 name::value[Additional value]
 
-////
-Блочный комментарий
-////
-
-// Встроенный макрос
 Текст name:value[text].
 
-// Встроенный макрос с пустым текстом
 Текст name:value[].
 
 NOTE: Примечание

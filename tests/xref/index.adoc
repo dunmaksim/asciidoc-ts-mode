@@ -1,0 +1,5 @@
+# References
+
+Simple <<xref>> link.
+
+Link with xref:[link] macro.

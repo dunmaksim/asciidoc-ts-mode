@@ -1,5 +1,7 @@
 = Callouts
 
 <1> Callout 1
+
 <2> Callout 2
+
 <3> Callout 3

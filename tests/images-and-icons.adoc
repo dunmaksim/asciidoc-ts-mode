@@ -1,13 +1,13 @@
-# Images and icons
+= Images and icons
 
-image:path-to-image.png[]
+image::path-to-image.png[]
 
-image:path-to-image.svg[properties]
+image::path-to-image.svg[]
 
 Image in text are availiable image:too.png[].
 
-icon:path-to-icon.ico[properties]
+icon::path-to-icon.ico[properties]
 
-icon:path-to-icon.ico[]
+icon::path-to-icon.ico[]
 
 Icon in text are availiable icon:too.ico[]
