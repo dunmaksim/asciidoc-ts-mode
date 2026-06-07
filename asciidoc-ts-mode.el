@@ -1,4 +1,4 @@
-;;; asciidoc-ts-mode.el --- Major mode for editing AsciiDoc files using tree-sitter -*- lixical-binding: t; -*-
+;;; asciidoc-ts-mode.el --- Major mode for editing AsciiDoc files using tree-sitter -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Dunaevskiy Maxim
 
@@ -22,9 +22,9 @@
 ;; put somewhere Emacs can find it.  See the docstring of
 ;; `treesit-extra-load-path'.
 
-;; This mode doesn't associate ifself with .adoc files automatically.  To
+;; This mode doesn't associate itself with .adoc files automatically.  To
 ;; use this mode by default, assuming you have the tree-sitter grammar
-;; availiable, do one of the following:
+;; available, do one of the following:
 ;;
 ;; Customize 'auto-mode-alist' to turn asciidoc-ts-mode automatically.
 ;;   For example:
@@ -48,9 +48,9 @@
 (require 'faces)
 (require 'font-lock)
 
-
-(declare-function treesit-parser-create "treesit.c")
+(declare-function treesit-language-available-p "treesit.c")
 (declare-function treesit-node-type "treesit.c")
+(declare-function treesit-parser-create "treesit.c")
 
 (defgroup asciidoc-ts nil
   "Major mode for viewing and editing Asciidoc buffers."
@@ -64,7 +64,7 @@
 
 (defgroup asciidoc-ts-faces nil
   "Faces used by Asciidoc-TS."
-  :group 'asciidoc-ts-faces
+  :group 'asciidoc-ts
   :group 'faces)
 
 (defface asciidoc-ts-heading-0 '((t (:inherit font-lock-function-name-face :weight bold)))
@@ -140,6 +140,37 @@ code block region, e.g.:
 
 (defface asciidoc-ts-list-marker '((t (:inherit shadow :slant normal :weight normal)))
   "Face for Asciidoc list markers like -, * and •."
+  :version "30.1")
+
+(defface asciidoc-ts-table '((t (:inherit (asciidoc-ts-code-block) :extend t)))
+  "Face for Asciidoc table.
+Alter this face to add a `:background' for a visually distinct table
+region, e.g.:
+  (set-face-attribute \\='asciidoc-ts-table nil :background \"gray95\")"
+  :version "31.1")
+
+(defface asciidoc-ts-table-block-marker '((t (:inherit asciidoc-ts-table)))
+  "Face for Asciidoc table block markers |===."
+  :version "30.1")
+
+
+(defface asciidoc-ts-admonition-note '((t (:inherit default)))
+  "Face for Asciidoc NOTE admonition."
+  :version "30.1")
+
+(defface asciidoc-ts-admonition-tip '((t (:inherit success)))
+  "Face for Asciidoc TIP admonition."
+  :version "30.1")
+
+(defface asciidoc-ts-admonition-important '((t (:inherit font-lock-warning-face)))
+  "Face for Asciidoc IMPORTANT admonition.")
+
+(defface asciidoc-ts-admonition-warning '((t (:inherit font-lock-warning-face)))
+  "Face for Asciidoc WARNING admonition."
+  :version "30.1")
+
+(defface asciidoc-ts-admonition-error '((t (:inherit error)))
+  "Face for asciidoc CAUTION admonition."
   :version "30.1")
 
 
@@ -225,20 +256,28 @@ code block region, e.g.:
        (checked_list_item
          (checked_list_marker) @asciidoc-ts-list-marker))
 
+    ;; Tables
+    :language 'asciidoc
+    :feature 'table
+    '((table_block
+        (table_block_marker) @asciidoc-ts-table-block-marker
+        (table_cell) @asciidoc-ts-table
+        (table_block_marker) @asciidoc-ts-table-block-marker))
+
 
     ;; Admonitions
     :language 'asciidoc
     :feature 'admonition
     '((admonition
-        (admonition_note) @success)
+        (admonition_note) @asciidoc-ts-admonition-note)
        (admonition
-         (admonition_tip) @success)
+         (admonition_tip) @asciidoc-ts-admonition-tip)
        (admonition
-         (admonition_important) @warning)
+         (admonition_important) @asciidoc-ts-admonition-important)
        (admonition
-         (admonition_caution) @error)
+         (admonition_caution) @asciidoc-ts-admonition-caution)
        (admonition
-         (admonition_warning) @error))
+         (admonition_warning) @asciidoc-ts-admonition-warning))
 
     ;; Macro
     :language 'asciidoc
@@ -311,7 +350,7 @@ code block region, e.g.:
 
 Uses the `asciidoc' and `asciidoc-inline' Tree-sitter grammars.
 Install them once with \\[asciidoc-ts-install-grammars]."
-  :group 'asciidoc
+  :group 'asciidoc-ts
 
   (unless (treesit-available-p)
     (error "Tree-sitter is not available in this Emacs build"))
@@ -335,12 +374,11 @@ Install them once with \\[asciidoc-ts-install-grammars]."
     '(;; Level 1 – always on
        (comment block)
        ;; Level 2 – default on
-       (heading attribute markup macro)
+       (heading attribute markup macro table)
        ;; Level 3 – default on
        (list inline-macro)
        ;; Level 4 – toggle with M-x font-lock-mode / customize
        (admonition)))
-  (treesit-major-mode-setup)
 
   ;; Imenu
   (setq-local treesit-simple-imenu-settings asciidoc-ts-mode--imenu-rules)
@@ -361,22 +399,21 @@ Install them once with \\[asciidoc-ts-install-grammars]."
 
   ;; Comment syntax (single-line comments only in AsciiDoc)
   (setq-local comment-start "// ")
-  (setq-local comment-end ""))
+  (setq-local comment-end "")
+
+  (treesit-major-mode-setup))
 
 
 ;;;###autoload
 (defun asciidoc-ts-mode-maybe ()
   "Enable `asciidoc-ts-mode' when its grammars are available."
-  (declare-function treesit-language-available-p "treesit.c")
   (if (and (treesit-language-available-p 'asciidoc)
         (treesit-language-available-p 'asciidoc-inline))
     (asciidoc-ts-mode)
     (text-mode)))
 
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.adoc\\'"     . asciidoc-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.asciidoc\\'" . asciidoc-ts-mode))
-
+(add-to-list 'auto-mode-alist '("\\.adoc\\'"     . asciidoc-ts-mode-maybe))
+(add-to-list 'auto-mode-alist '("\\.asciidoc\\'" . asciidoc-ts-mode-maybe       ))
 
 (provide 'asciidoc-ts-mode)
 
