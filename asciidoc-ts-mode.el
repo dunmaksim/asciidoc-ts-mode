@@ -22,26 +22,6 @@
 ;; put somewhere Emacs can find it.  See the docstring of
 ;; `treesit-extra-load-path'.
 
-;; This mode doesn't associate itself with .adoc files automatically.  To
-;; use this mode by default, assuming you have the tree-sitter grammar
-;; available, do one of the following:
-;;
-;; Customize 'auto-mode-alist' to turn asciidoc-ts-mode automatically.
-;;   For example:
-;;
-;;    (add-to-list 'auto-mode-alist ("\\.adoc\\'" . asciidoc-ts-mode))
-;;
-;;   will turn on the asciidoc-ts-mode for Asciidoc source files.
-;;
-;; - If you have the Asciidoc grammar installed, add
-;;
-;;     (load "asciidoc-ts-mode")
-;;
-;;   to your init file.
-;;
-;; You can also turn on this mode manually in a buffer.
-
-
 ;;; Code:
 
 (require 'treesit)
@@ -76,19 +56,19 @@
   :version "30.1")
 
 (defface asciidoc-ts-heading-2 '((t (:inherit font-lock-function-name-face :weight bold)))
-  "Face for level 2 ASciidoc headings."
+  "Face for level 2 Asciidoc headings."
   :version "30.1")
 
 (defface asciidoc-ts-heading-3 '((t (:inherit font-lock-function-name-face :weight bold)))
-  "Face for level 3 ASciidoc headings."
+  "Face for level 3 Asciidoc headings."
   :version "30.1")
 
 (defface asciidoc-ts-heading-4 '((t (:inherit font-lock-function-name-face :weight bold)))
-  "Face for level 4 ASciidoc headings."
+  "Face for level 4 Asciidoc headings."
   :version "30.1")
 
 (defface asciidoc-ts-heading-5 '((t (:inherit font-lock-function-name-face :weight bold)))
-  "Face for level 5 ASciidoc headings."
+  "Face for level 5 Asciidoc headings."
   :version "30.1")
 
 (defface asciidoc-ts-macro-name '((t (:inherit font-lock-function-name-face)))
@@ -169,7 +149,7 @@ region, e.g.:
   "Face for Asciidoc WARNING admonition."
   :version "30.1")
 
-(defface asciidoc-ts-admonition-error '((t (:inherit error)))
+(defface asciidoc-ts-admonition-caution '((t (:inherit error)))
   "Face for asciidoc CAUTION admonition."
   :version "30.1")
 
@@ -321,6 +301,7 @@ region, e.g.:
 
 
 ;; IMenu
+;; BUG: fix this code
 (defvar asciidoc-ts-mode--imenu-rules
   '(("Headings"
       "heading"
@@ -413,7 +394,7 @@ Install them once with \\[asciidoc-ts-install-grammars]."
     (text-mode)))
 
 (add-to-list 'auto-mode-alist '("\\.adoc\\'"     . asciidoc-ts-mode-maybe))
-(add-to-list 'auto-mode-alist '("\\.asciidoc\\'" . asciidoc-ts-mode-maybe       ))
+(add-to-list 'auto-mode-alist '("\\.asciidoc\\'" . asciidoc-ts-mode-maybe))
 
 (provide 'asciidoc-ts-mode)
 
